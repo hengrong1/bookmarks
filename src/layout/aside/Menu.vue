@@ -1,5 +1,6 @@
 <template>
   <n-tree
+      class="treeStyle"
       block-line
       :data="data"
       key-field="id"
@@ -8,11 +9,12 @@
       draggable
       accordion
       :default-selected-keys="defaultSelectedKeys"
+      :on-update:expanded-keys="updatePrefixWithExpaned"
+      :node-props="nodeProps"
       :render-switcher-icon="renderSwitcherIconWithExpaned"
       :cancelable="false"
       @drop="handleDrop"
-      :on-update:expanded-keys="updatePrefixWithExpaned"
-      class="treeStyle"
+      :on-update:selected-keys="selectedKeysHandle"
   />
 </template>
 
@@ -27,15 +29,16 @@ import {
 } from "@vicons/fluent";
 import {useBookmarkStore} from '@/stores/counter'
 import {generateMenu} from '@/utils/bookmark'
+import {storeToRefs} from "pinia";
 
 const BookmarkStore = useBookmarkStore()
 // console.log(BookmarkStore.bookmark)
 
 const data = ref()
 const defaultSelectedKeys = ref()
-
-
-const re = generateMenu(BookmarkStore.bookmark)
+const {bookmark, menuSelected} = storeToRefs(BookmarkStore)
+console.log(bookmark, menuSelected)
+const re = generateMenu(bookmark.value)
 console.log(re);
 if (re.length > 0) {
   let walk = (data) => {
@@ -50,7 +53,9 @@ if (re.length > 0) {
   }
   walk(re)
   data.value = re
-  defaultSelectedKeys.value = [re[0].id]
+  console.log(defaultSelectedKeys.value, menuSelected.value, re[0].id)
+  defaultSelectedKeys.value = menuSelected.value.length === 0? [re[0].id] : menuSelected.value
+  console.log(defaultSelectedKeys.value)
 }
 const updatePrefixWithExpaned = (_keys, _option, meta) => {
   console.log(meta)
@@ -120,6 +125,28 @@ const handleDrop = ({ node, dragNode, dropPosition }) => {
   console.log(node, dragNode, dropPosition)
 }
 
+const nodeProps = ({ option }) => {
+  return {
+    onClick(e) {
+      // message.info("[Click] " + option.label);
+      // console.log(option, e)
+    },
+    onContextmenu(e) {
+      console.log(e)
+      // optionsRef.value = [option];
+      // showDropdownRef.value = true;
+      // xRef.value = e.clientX;
+      // yRef.value = e.clientY;
+      // console.log(e.clientX, e.clientY);
+      e.preventDefault();
+    }
+  };
+}
+
+const selectedKeysHandle = (keys, option, meta) => {
+  BookmarkStore.menuSelected = keys
+  console.log(keys, option, meta)
+}
 
 </script>
 

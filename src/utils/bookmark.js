@@ -144,7 +144,8 @@ function guid() {
   });
 }
 
-function findItemById(id, BookmarksTree) {
+export function findItemById(id, BookmarksTree) {
+  console.log('findItemById->传入参数: ', id, BookmarksTree)
   let val
   BookmarksTree.find((v, i, arr) => {
     let walk = (data) => {
@@ -159,6 +160,6 @@ function findItemById(id, BookmarksTree) {
     }
     walk(v)
   })
-  console.log('=====:', val)
+  console.log('findItemById=>查找结束:', val)
   return val
 }

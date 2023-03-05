@@ -5,6 +5,8 @@ export const useBookmarkStore = defineStore('bookmark', {
   state: () => {
     return {
       bookmark: [],
+      menuSelected: [],
+      showCardType: 0
     }
   },
   persist: {

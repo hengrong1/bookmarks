@@ -46,9 +46,8 @@
 import {NSpace, NIcon, NIconWrapper, NPopover} from "naive-ui";
 import {useNotification} from 'naive-ui'
 import {
-  Folder24Filled as Folder,
-  ArrowUpload24Filled as Import,
-  ArrowDownload24Filled as Export,
+  ArrowCircleUp24Filled as Import,
+  ArrowCircleDown24Filled as Export,
   FolderProhibited24Filled as FolderDel,
   FolderAdd24Filled as FolderAdd
 } from "@vicons/fluent";
@@ -120,7 +119,7 @@ const fileCheck = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40px;
+  height: 60px;
 }
 
 </style>
