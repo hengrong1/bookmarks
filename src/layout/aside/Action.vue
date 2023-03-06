@@ -51,12 +51,15 @@ import {
   FolderProhibited24Filled as FolderDel,
   FolderAdd24Filled as FolderAdd
 } from "@vicons/fluent";
-import {analysisBookmarksStr} from '@/utils/bookmark'
+import {analysisBookmarksStr, generateMenu} from '@/utils/bookmark'
 import {useBookmarkStore} from "@/stores/counter";
 
-const Bookmark = useBookmarkStore()
+const store = useBookmarkStore()
+import {storeToRefs} from "pinia";
 
 const notification = useNotification()
+const {menuSelected} = storeToRefs(store)
+
 const BtnColor = {
   info: '64,152,252',
   primary: '14,122,13',
@@ -82,8 +85,11 @@ const importFile = () => {
     reader.onload = () => {
       // console.log(reader.result)
       const re = analysisBookmarksStr(reader.result)
-      console.log('--====:',re)
-      Bookmark.bookmark = [...re]
+      const reMenu = generateMenu(re)
+      console.log('--====:',re, store.bookmark)
+      store.bookmark = [...re]
+      store.menuSelected = menuSelected.value.length === 0? [reMenu[0].children[0].id] : menuSelected.value
+      
     }
 
     reader.onerror = () => {
